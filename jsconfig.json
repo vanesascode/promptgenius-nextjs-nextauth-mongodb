@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "paths": {
-      "@/*": ["./*"]
+      "@*": ["./*"]
     }
   }
 }
+
+//It's not: "@/*", we remove the slash.

@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Open source AI prompting tool to discover, create and share creative prompts
 
-## Getting Started
+Learning to use NextJS. Learning about the server/client components, the app file router (layout, page, dynamic routes, loading, errors), metadata for better SEO.
 
-First, run the development server:
+Also, about data fetching and API endpoints:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- SSR (Server Side Rendering)
+- SSG (Static Site Generation)
+- ISR (Incremental Static Generation)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tools & Notes of Use:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 🔸 NextJS
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+First thing was to delete the app folder and create a new one from scratch.
 
-## Learn More
+- Then, in the root folder, create a `components`, and a `styles` folder.
 
-To learn more about Next.js, take a look at the following resources:
+- `import Image from "next/image"`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Next.js provides an optimized Image component that allows you to easily optimize and load images on your website. It provides features like automatic image optimization, lazy loading, and support for responsive images.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+It's important to import the image first and add it into the src attribute with `curly brackets`, so it works.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 🔸 Next-auth
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+-------- USE CLIENT FILES:
+
+Info [HERE](https://next-auth.js.org/getting-started/example)
+
+- `Provider.jsx` : This component gets the `SessionProvider` from the next-auth/react package to handle the session management.
+
+- We wrap our project with the provider component in the `layout.jsx` file, to expose the session context and be able to use the `useSession` in the `Nav.jsx` component, along with the `signIn` and `signOut` functions.
+
+-------- SERVER: API BACKEND ENDPOINTS:
+
+(Create an `api` folder inside the app folder. Inside, create an `auth` folder. Inside create a folder `[...nextauth]`. Inside, create a file `route.js`, which is the file that will handle our entire authentication process.)
+
+- In the `route.js` file we set up authentication using `Google` as the provider.
+
+- You have to create a project in `https://console.cloud.google.com/` to get the "clientId" and the "clientSecret" passwords, which we hide in a `.env` file we create in the root folder. In the Authorized redirect URIs, we also have to add: http://localhost:3000/api/auth/callback/google
+  More info about the Next Auth REST API [HERE](https://next-auth.js.org/getting-started/rest-api#getpost-apiauthcallbackprovider)
+
+(Create a `utils` folder in the root folder, and inside a file `database.js`)
+
+- in the `database.js` file is a module that connects to a `MongoDB Atlas` database using `Mongoose`(which is an Object Data Modeling (ODM) library for MongoDB and provides a higher-level abstraction for interacting with MongoDB). In this file we also track the connection status of the MongoDB database.
+
+- Then we import the connection to the database to the route.js file.
+
+(Create a folder `models` in the root folder, and inside a file `user.js`)
+
+- In the `user.js` file define a Mongoose `schema` for a `User model` and export it.
+
+The code also `checks if a model with the name "User" already exists` or has to be created. This is because it is not a regular always on always running back-end server. In NextJS the route is only going to be created and running for the time when it is getting called, so we need to make that check. So, if a model named user already exists inthe models object it assigns that existing model to the user variable. This is going to prevent us from redefining the model everytime the route is called (which is every time the connection is established), and ensure that the existing model is reused.
+
+- Then we import the model to the database to the route.js file, and we can finish the session and the signIn functions.
+
+- We need some other environment variables for being able to deploy the project into production later on. For the NEXTAUTH_SECRET one, go [HERE](https://next-auth.js.org/deployment)- (if you choose the `openssl rand -base64 32` command option, you can run it [HERE](https://www.cryptool.org/en/cto/openssl))
+
+- Finally, we can use `useSession` in our `Nav.jsx` file.
+
+---
+
+### 🔸 Bcrypt
+
+---
+
+### 🔸 Mongodb + Mongoose
