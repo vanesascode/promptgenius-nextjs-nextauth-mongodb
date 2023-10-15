@@ -28,15 +28,15 @@ const Nav = () => {
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
   return (
-    <nav className="flex-between w-full mb-16 pt-3">
+    <nav className="flex-between w-full mb-16 ">
       {/********** LEFT SIDE NAVBAR ********/}
 
       <Link href="/" className="flex gap-2 flex-center">
         <Image
           src={logo}
           alt="promptgenius logo"
-          width={30}
-          height={30}
+          width={50}
+          height={50}
           className="object-contain"
         />
         <p className="logo_text">Promptgenius</p>
@@ -46,7 +46,7 @@ const Nav = () => {
 
       {/* DESKTOP MENU */}
 
-      <div className="sm:flex hidden">
+      <div className="md:flex hidden">
         {/* When user is logged in */}
 
         {/* Checking first what we have in session?.user and in the provider */}
@@ -67,8 +67,8 @@ const Nav = () => {
             <Link href="/profile">
               <Image
                 src={session?.user.image}
-                width={37}
-                height={37}
+                width={43}
+                height={43}
                 className="rounded-full"
                 alt="profile pic"
               />
@@ -95,14 +95,14 @@ const Nav = () => {
 
       {/* MOBILE MENU */}
 
-      <div className="sm:hidden flex relative">
+      <div className="md:hidden flex relative">
         {/* When user is logged in */}
         {session?.user ? (
           <div className="flex">
             <Image
               src={session?.user.image}
-              width={37}
-              height={37}
+              width={43}
+              height={43}
               className="rounded-full"
               alt="profile pic"
               onClick={() => setToggleDropdown((prev) => !prev)}

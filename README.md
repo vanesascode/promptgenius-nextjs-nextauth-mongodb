@@ -26,6 +26,8 @@ It's important to import the image first and add it into the src attribute with 
 
 ### 🔸 Next-auth
 
+GOOGLE AUTHENTIFICATION:
+
 -------- USE CLIENT FILES:
 
 Info [HERE](https://next-auth.js.org/getting-started/example)
@@ -42,6 +44,17 @@ Info [HERE](https://next-auth.js.org/getting-started/example)
 
 - You have to create a project in `https://console.cloud.google.com/` to get the "clientId" and the "clientSecret" passwords, which we hide in a `.env` file we create in the root folder. In the Authorized redirect URIs, we also have to add: http://localhost:3000/api/auth/callback/google
   More info about the Next Auth REST API [HERE](https://next-auth.js.org/getting-started/rest-api#getpost-apiauthcallbackprovider)
+
+  (if Github loads your env file, even though you have it in `gitignore file`, follow these commands:
+
+  ```
+  git rm --cached .env
+  git add .
+  git commit -m "Removed.env"
+  git push
+  ```
+
+  )
 
 (Create a `utils` folder in the root folder, and inside a file `database.js`)
 
@@ -62,6 +75,22 @@ The code also `checks if a model with the name "User" already exists` or has to 
 - Finally, we can use `useSession` in our `Nav.jsx` file.
 
 ---
+
+CREATING PROMPTS
+
+-------- USE CLIENT FILES:
+
+We create a new page.jsx in the `create-promp` folder, which is going to be the page to create prompts.
+
+- In it we have to import the `useSession` from `next-auth` which is going to allow us to know which user is currently logged in.
+
+- Create a form in which a new prompt is created everytime, including the session.user.id. We `post` the prompt into our database using a fetch with url `/api/prompt/new`, for which we have to create an endopoint in our server:
+
+-------- SERVER: API BACKEND ENDPOINTS:
+
+In our API folder, we create another folder called `prompt` and inside another folder called `new`, and inside then a file called `route.js`.
+
+In this file `route.js` we create our API route for the prompts, after we have created a model for the prompts (see in `models` folder). Notice we have to connect the database every time the route gets called.
 
 ### 🔸 Bcrypt
 

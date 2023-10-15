@@ -3,15 +3,13 @@ import Feed from "@components/Feed";
 const Home = () => (
   <section className="w-full flex-center flex-col">
     <h1 className="head_text text-center">
-      Discover & Share
+      Discover & Share&nbsp;
       <br className="max-md:hidden" />
-      <span className="orange_gradient text-center">
-        your favorite AI prompts
-      </span>
+      <span className="red_gradient text-center">your favorite AI prompts</span>
     </h1>
     <p className="desc text-center">
-      Promptgenius is a web app that allows you to discover,create and share
-      your favorite AI prompts.
+      Promptgenius is an open-source AI prompting tool that allows you to
+      discover, create and share your favorite prompts.
     </p>
 
     <Feed />
