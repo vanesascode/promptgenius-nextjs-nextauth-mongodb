@@ -58,7 +58,7 @@ Info [HERE](https://next-auth.js.org/getting-started/example)
 
 (Create a `utils` folder in the root folder, and inside a file `database.js`)
 
-- in the `database.js` file is a module that connects to a `MongoDB Atlas` database using `Mongoose`(which is an Object Data Modeling (ODM) library for MongoDB and provides a higher-level abstraction for interacting with MongoDB). In this file we also track the connection status of the MongoDB database.
+- The `database.js` file is a module that connects to a `MongoDB Atlas` database using `Mongoose`(which is an Object Data Modeling (ODM) library for MongoDB and provides a higher-level abstraction for interacting with MongoDB). In this file we also track the connection status of the MongoDB database.
 
 - Then we import the connection to the database to the route.js file.
 
@@ -92,8 +92,127 @@ In our API folder, we create another folder called `prompt` and inside another f
 
 In this file `route.js` we create our API route for the prompts, after we have created a model for the prompts (see in `models` folder). Notice we have to connect the database every time the route gets called.
 
+RENDERING THE PROMPTS:
+
+We create the `Feed.jsx` component and in there we make a fetch of the prompts in the database. For that we use the URI of the GET endpoint `route.js` we create inside the `prompt` folder inside the `api` folder.
+
+RENDERING THE PROMPTS OF ONLY A USER, IN THEIR PRIVATE PAGE:
+
+We create a new app router page, in the folder `profile`. In this page we fetch the prompts only of a user, and only when the user id of the session exists.
+
+The fetch URI is this: fetch(`/api/users/${session?.user.id}/posts`)
+
+So, our new `route.js` file is going to be in: `api > users > [id] > posts`
+
+Then, in our route.js file we are going to be able to pass `params.id`, through props as `{params}`, that is going to be that user id.
+
+EDITING AND DELETING THE PERSONAL PROMPTS:
+
+In the page of the `profile` app route folder, we create two functions, edit and delete. Of course, we also have the `useSession` imported there so we can pass them the `post` as argument. This page will have a component called `Profile.jsx` which will receive some props or others depending if the user is registered or not, and whether it is their profile or another user's profile. Then, this component renders again the `PromptCard.jsx` component, but this time with the edit and delete props (so you will see that the buttons to edit and delete only appear if the user is logged in).
+
+So that these two actions (edit and delete) work we create the requests (get, patch and delete) to the database through endpoints in our api. So, in the api folder, into the `prompt` folder, we create a dynamic folder `[id]` and inside we create a new `route.js` file in which the endpoints will be.
+
+Since we have this dynamic folder [id], again we pass the `params.id`, through props as `{params}`, that is the user id.
+
+- In the case of the edit process, in the function we just send the user to another page, one we create in the folder `update-prompt`. The route is dynamic, depending on the id of the prompt:
+
+```
+ const handleEdit = (post) => {
+    router.push(`/update-prompt?id=${post._id}`);
+  };
+```
+
+In the update-prompt file, we copy the code from the `create-prompt` page and modify it so it is reused for the editing purpose. In here we also need the id of the prompt, so we import `useSearchParams`, which is a hook that lets you read the current URL's query string. Example:
+
+```
+import { useSearchParams } from 'next/navigation'
+
+export default function SearchBar() {
+  const searchParams = useSearchParams()
+
+  const search = searchParams.get('search')
+
+  // URL -> `/dashboard?search=my-project`
+  // `search` -> 'my-project'
+  return <>Search: {search}</>
+}
+```
+
+This way we can access a particular prompt. We need to get it first of all, with the GET fetch and a useEffect, so it is loaded once the page `create-prompt` is loaded:
+
+```
+const searchParams = useSearchParams();
+  const promptId = searchParams.get("id");
+
+  useEffect(() => {
+    const getPromptDetails = async () => {
+      const response = await fetch(`/api/prompt/${promptId}`);
+      const data = await response.json();
+
+      setPost({
+        prompt: data.prompt,
+        tag: data.tag,
+      });
+    };
+
+    if (promptId) getPromptDetails();
+  }, [promptId]);
+
+```
+
+Once loaded, since it is done in the `Form.jsx` component (this time passing other props for the occasion), when we click the button edit of the form (once we have edited the prompt), the Patch fetch runs:
+
+```
+ try {
+      const response = await fetch(`/api/prompt/${promptId}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          prompt: post.prompt,
+          tag: post.tag,
+        }),
+      });
+
+      if (response.ok) {
+        router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+```
+
+- In the case of delete process, we put the Delete fetch just inside the function that is in the `profile` app route:
+
+```
+      try {
+        await fetch(`/api/prompt/${post._id.toString()}`, {
+          method: "DELETE",
+        });
+
+        const filteredPosts = myPosts.filter((item) => item._id !== post._id);
+
+        setMyPosts(filteredPosts);
+      } catch (error) {
+        console.log(error);
+      }
+```
+
 ### 🔸 Bcrypt
 
 ---
 
 ### 🔸 Mongodb + Mongoose
+
+The `database.js` file, inside the `utils`folder, is a module that connects to a `MongoDB Atlas` database using [`Mongoose`](https://mongoosejs.com) (which is an Object Data Modeling (ODM) library for MongoDB and provides a higher-level abstraction for interacting with MongoDB). In this file we also track the connection status of the MongoDB database.
+
+To get the `connection string` you go to `connect` into your cluster, and into `drivers`. We add the password to the string, and then we copy it into the env file (without commas ""!):
+
+```
+GOOGLE_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+GOOGLE_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+MONGODB_URI=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+NEXTAUTH_URL=http://localhost:3000/
+NEXTAUTH_URL_INTERNAL=http://localhost:3000/
+NEXTAUTH_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```

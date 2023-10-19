@@ -13,14 +13,21 @@ const Nav = () => {
 
   const [providers, setProviders] = useState(null);
 
+  // useEffect(() => {
+  //   const setUpProviders = async () => {
+  //     const response = await getProviders();
+
+  //     setProviders(response);
+  //   };
+
+  //   setUpProviders();
+  // }, []);
+
   useEffect(() => {
-    const setUpProviders = async () => {
-      const response = await getProviders();
-
-      setProviders(response);
-    };
-
-    setUpProviders();
+    (async () => {
+      const res = await getProviders();
+      setProviders(res);
+    })();
   }, []);
 
   // TOGGLE MOBILE MENU:
@@ -38,6 +45,8 @@ const Nav = () => {
           width={50}
           height={50}
           className="object-contain"
+          priority={true}
+          quality={75} // {number 1-100}
         />
         <p className="logo_text">Promptgenius</p>
       </Link>
