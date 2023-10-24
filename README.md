@@ -1,12 +1,6 @@
 # Open source AI prompting tool to discover, create and share creative prompts
 
-Learning to use NextJS. Learning about the server/client components, the app file router (layout, page, dynamic routes, loading, errors), metadata for better SEO.
-
-Also, about data fetching and API endpoints:
-
-- SSR (Server Side Rendering)
-- SSG (Static Site Generation)
-- ISR (Incremental Static Generation)
+Learning to use NextJS. Learning about the server/client components, the app file router (layout, page, dynamic routes, loading, errors), the backend (api routes and models in NextJs way), and metadata for better SEO.
 
 ## Tools & Notes of Use:
 
@@ -197,7 +191,19 @@ Once loaded, since it is done in the `Form.jsx` component (this time passing oth
       }
 ```
 
-### 🔸 Bcrypt
+### 🔸 Search Functionality
+
+The search functionality in this project allows users to search for prompts based on prompt content, user, or tag.
+
+- When the user enters a search query in the search input field, the `handleSearchChange` function is triggered. This function sets the search text using the setSearchText function from the useState hook. It also clears the previous search timeout using the clearTimeout function to prevent unnecessary API calls.
+
+- After setting the search text, a `debounce method` is used to delay the execution of the search. The `setSearchTimeout` function from the useState hook sets a new timeout that triggers the search after a delay of 500 milliseconds. During this delay, if the user continues typing, the previous timeout is cleared and a new timeout is set.
+
+- When the search is triggered, the `filterPrompts` function is called. This function creates a `regular expression` with the search text and performs a case-insensitive search on the posts array. It filters the posts array based on whether the search text matches the username of the creator, the tag, or the prompt content.
+
+- The filtered search results are then set using the `setSearchedResults` function from the useState hook. This updates the searchedResults state with the filtered prompts.
+
+- Based on the presence of search text, the Feed component conditionally renders the PromptCardList component. If there is search text, it passes the searchedResults and handleTagClick function as props to PromptCardList. Otherwise, it passes the posts and handleTagClick function.
 
 ---
 

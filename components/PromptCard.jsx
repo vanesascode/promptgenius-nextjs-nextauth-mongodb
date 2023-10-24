@@ -9,6 +9,8 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
   const pathName = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
+
+  // copy prompt to clipboard state
   const [copied, setCopied] = useState("");
 
   const handleProfileClick = () => {
@@ -66,6 +68,9 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
       <p className="my-4 font-satoshi text-sm text-primary-gray">
         {post.prompt}
       </p>
+
+      {/*The function handleTagClick knows to copy the content of the tag because it receives the tagName as a parameter:*/}
+
       <p
         className="font-inter text-sm text-primary-red cursor-pointer"
         onClick={() => handleTagClick && handleTagClick(post.tag)}
