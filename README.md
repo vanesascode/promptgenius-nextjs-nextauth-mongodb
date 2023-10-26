@@ -4,6 +4,8 @@ Learned to use NextJS: about the server/client components, the app file router (
 
 ![video-promptgenius](https://github.com/vanesascode/vanesascode_portfolio/assets/131259155/aa08e689-8bb5-4ecc-89d9-dd16f8413bd2)
 
+Visit it [HERE](https://promptgenius-chi.vercel.app/)
+
 ## Tools & Notes of Process:
 
 ### 🔸 NextJS
