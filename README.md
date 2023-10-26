@@ -1,8 +1,10 @@
 # Open source AI prompting tool to discover, create and share creative prompts
 
-Learning to use NextJS. Learning about the server/client components, the app file router (layout, page, dynamic routes, loading, errors), the backend (api routes and models in NextJs way), and metadata for better SEO.
+Learned to use NextJS: about the server/client components, the app file router (layout, page, dynamic routes, loading, errors), the backend (api routes and models in NextJs way), and metadata for better SEO.
 
-## Tools & Notes of Use:
+![video-promptgenius](https://github.com/vanesascode/vanesascode_portfolio/assets/131259155/aa08e689-8bb5-4ecc-89d9-dd16f8413bd2)
+
+## Tools & Notes of Process:
 
 ### 🔸 NextJS
 
@@ -29,6 +31,16 @@ Info [HERE](https://next-auth.js.org/getting-started/example)
 - `Provider.jsx` : This component gets the `SessionProvider` from the next-auth/react package to handle the session management.
 
 - We wrap our project with the provider component in the `layout.jsx` file, to expose the session context and be able to use the `useSession` in the `Nav.jsx` component, along with the `signIn` and `signOut` functions.
+
+👉 If you want to go to a specific page when signing out, you must especify it:
+
+```
+    onClick={() => {
+                signOut({ redirect: false }).then(() => {
+                  router.push("/"); // Redirect to the dashboard page after signing out
+                });
+              }}
+```
 
 -------- SERVER: API BACKEND ENDPOINTS:
 

@@ -19,7 +19,7 @@
   background-color: rgb(252, 247, 247);
 }
 
-/* .main:before {
+.main:before {
   background: radial-gradient(circle, rgba(2, 0, 36, 0) 0, #fafafa 100%);
   position: absolute;
   content: "";
@@ -27,11 +27,11 @@
   width: 100%;
   height: 100%;
   top: 0;
-} */
+}
 
 .main:after {
   content: "";
-  background-image: url("/assets/images/dots5.svg");
+  background-image: url("/assets/images/dots.svg");
   z-index: 1;
   position: absolute;
   width: 100%;
@@ -168,4 +168,8 @@
 
 .flex-between {
   @apply flex justify-between items-center;
+}
+
+.color {
+  color: rgb(73, 73, 73);
 }

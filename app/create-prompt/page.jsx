@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 
 import Form from "@components/Form";
 
+//create prompt functions and fetch
+
 const CreatePrompt = () => {
   const router = useRouter();
   const { data: session } = useSession();
@@ -36,6 +38,8 @@ const CreatePrompt = () => {
       setIsSubmitting(false);
     }
   };
+
+  //create prompt form
 
   return (
     <Form

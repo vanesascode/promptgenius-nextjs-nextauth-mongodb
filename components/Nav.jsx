@@ -5,23 +5,15 @@ import Image from "next/image";
 import logo from "../public/assets/images/logo.svg";
 import { useState, useEffect } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Nav = () => {
+  const router = useRouter();
   // NEXT-AUTH:
 
   const { data: session } = useSession();
 
   const [providers, setProviders] = useState(null);
-
-  // useEffect(() => {
-  //   const setUpProviders = async () => {
-  //     const response = await getProviders();
-
-  //     setProviders(response);
-  //   };
-
-  //   setUpProviders();
-  // }, []);
 
   useEffect(() => {
     (async () => {
@@ -69,7 +61,15 @@ const Nav = () => {
               Create Post
             </Link>
 
-            <button className="outline_btn" type="button" onClick={signOut}>
+            <button
+              className="outline_btn"
+              type="button"
+              onClick={() => {
+                signOut({ redirect: false }).then(() => {
+                  router.push("/"); // Redirect to the dashboard page after signing out
+                });
+              }}
+            >
               Sign Out
             </button>
 
@@ -135,11 +135,14 @@ const Nav = () => {
                   Create Prompt
                 </Link>
                 <button
+                  href="/"
                   className="mt-5 w-full black_btn"
                   type="button"
                   onClick={() => {
                     setToggleDropdown(false);
-                    signOut();
+                    signOut({ redirect: false }).then(() => {
+                      router.push("/"); // Redirect to the dashboard page after signing out
+                    });
                   }}
                 >
                   Sign Out

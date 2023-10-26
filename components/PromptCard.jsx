@@ -10,8 +10,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
   const router = useRouter();
   const { data: session } = useSession();
 
-  // copy prompt to clipboard state
-  const [copied, setCopied] = useState("");
+  // got to profile of the author of the prompt:
 
   const handleProfileClick = () => {
     console.log(post);
@@ -21,10 +20,50 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     router.push(`/profile/${post.creator._id}?name=${post.creator.username}`);
   };
 
+  // copy prompt to clipboard state:
+
+  const [copied, setCopied] = useState("");
+
   const handleCopy = () => {
     setCopied(post.prompt);
     navigator.clipboard.writeText(post.prompt);
     setTimeout(() => setCopied(""), 3000);
+  };
+
+  // share in social media:
+
+  const handleFacebookShare = () => {
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      window.location.href
+    )}`;
+    window.open(url, "_blank");
+  };
+
+  const handleTwitterShare = () => {
+    const author = post.creator.username;
+    const url = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+      window.location.href //returns the full URL of the current page
+    )}&text=${encodeURIComponent(`${author}: ${post.prompt}`)}`;
+    window.open(url, "_blank");
+  };
+
+  const handleEmailShare = () => {
+    const subject = "Check out this post";
+    const body = `I wanted to share this ${post.tag} AI prompt with you:\n\n${post.prompt}\n\nCheck it out at: ${window.location.href}`;
+
+    const mailtoLink = `mailto:?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink;
+  };
+
+  const handleWhatsAppShare = () => {
+    const message = `Check out this ${post.tag} post by ${post.creator.username}: ${post.prompt}\n\n${window.location.href}`;
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+
+    window.open(whatsappUrl, "_blank");
   };
 
   return (
@@ -70,13 +109,49 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
       </p>
 
       {/*The function handleTagClick knows to copy the content of the tag because it receives the tagName as a parameter:*/}
+      <div className="flex justify-between">
+        <p
+          className="font-inter text-sm text-primary-red cursor-pointer"
+          onClick={() => handleTagClick && handleTagClick(post.tag)}
+        >
+          #{post.tag}
+        </p>
 
-      <p
-        className="font-inter text-sm text-primary-red cursor-pointer"
-        onClick={() => handleTagClick && handleTagClick(post.tag)}
-      >
-        #{post.tag}
-      </p>
+        <div className="flex gap-3">
+          <button onClick={handleFacebookShare}>
+            <Image
+              src="/assets/icons/facebook.svg"
+              width={16}
+              height={16}
+              alt="facebook_icon"
+            />
+          </button>
+          <button onClick={handleTwitterShare}>
+            <Image
+              src="/assets/icons/twitterx.svg"
+              width={16}
+              height={16}
+              alt="twitter_icon"
+            />
+          </button>
+          <button onClick={handleEmailShare}>
+            <Image
+              src="/assets/icons/email.svg"
+              width={16}
+              height={16}
+              alt="email_icon"
+            />
+          </button>
+          <button onClick={handleWhatsAppShare}>
+            <Image
+              src="/assets/icons/whatsapp.svg"
+              width={16}
+              height={16}
+              alt="email_icon"
+            />
+          </button>
+        </div>
+      </div>
 
       {session?.user.id === post.creator._id && pathName === "/profile" && (
         <div className="mt-5 flex-end gap-4 border-t border- gray-400 pt-3">
